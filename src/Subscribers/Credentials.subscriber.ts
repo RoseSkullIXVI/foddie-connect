@@ -9,7 +9,7 @@ export class CredentialsSubscriber implements EntitySubscriberInterface<Credenti
   }
 
   async beforeInsert(event: InsertEvent<Credentials>) {
-    const { Email, password } = event.entity;
+    const { Email, Password } = event.entity;
 
     // Lowercase the email
     event.entity.Email = Email.toLowerCase();
@@ -17,6 +17,6 @@ export class CredentialsSubscriber implements EntitySubscriberInterface<Credenti
     // Generate salt and hash the password
     const salt = await bcrypt.genSalt();
     event.entity.salt = salt;
-    event.entity.password = await bcrypt.hash(password, salt);
+    event.entity.Password = await bcrypt.hash(Password, salt);
   }
 }

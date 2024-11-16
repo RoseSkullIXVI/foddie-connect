@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-@Entity()
+@Entity('appusers')
 export class AppUsers {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   AppUserId: number;
 
   @Column()

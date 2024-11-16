@@ -7,7 +7,7 @@ export class Credentials {
   Username: string;
 
   @Column()
-  password: string;
+  Password: string;
 
   @Column({ nullable: true })
   Token: string;

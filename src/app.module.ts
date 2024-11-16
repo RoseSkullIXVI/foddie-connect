@@ -15,10 +15,10 @@ import * as Joi from "@hapi/joi";
 @Module({
   imports: [ConfigModule.forRoot({isGlobal: true,
     validationSchema: Joi.object({
-      POSTGRES_HOST: Joi.string().required(),
-      POSTGRES_USER: Joi.string().required(),
-      POSTGRES_PASSWORD: Joi.string().required(),
-      POSTGRES_DB: Joi.string().required(),
+      PGHOST: Joi.string().required(),
+      PGUSER: Joi.string().required(),
+      PGPASSWORD: Joi.string().required(),
+      PGDATABASE: Joi.string().required(),
     })
   },
   ), AuthModule, UsersModule,

@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { CredentialsSubscriber } from "src/Subscribers/Credentials.subscriber";
 
 @Module({
   imports: [
@@ -14,6 +15,10 @@ import { TypeOrmModule } from "@nestjs/typeorm";
         password: configService.get("PGPASSWORD"),
         database: configService.get("PGDATABASE"),
         entities: [__dirname + "/../**/*.entity{.ts,.js}"],
+        ssl: {
+          rejectUnauthorized: false, 
+        },
+        subscribers: [CredentialsSubscriber],
       }),
     }),
   ],
