@@ -15,12 +15,10 @@ export class UsersService {
 
     async registerUser (registerUser : RegisterUserDto ): Promise< {access_token : string}> {
       const {fullname , username , email, password } = registerUser;
-      console.log("Register User" , registerUser);
       const existingUser = await this.credentialsRepository.findOne({where : [{Username: username},{Email:email}]})
       if (existingUser) {
         throw new BadRequestException('Username or email already taken');
       }
-      console.log("Here");
       const appUser = this.appUserRepository.create({FullName:fullname});
       const savedUser = await this.appUserRepository.save(appUser);
 
