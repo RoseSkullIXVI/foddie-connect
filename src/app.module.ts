@@ -9,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from './Database/database.module';
+import { EmailsService } from './emails/emails.service';
 import * as Joi from "@hapi/joi";
 
 
@@ -25,6 +26,6 @@ import * as Joi from "@hapi/joi";
     DatabaseModule,
   ],
   controllers: [AppController],
-  providers: [AppService,JwtStrategy],
+  providers: [AppService,JwtStrategy, EmailsService],
 })
 export class AppModule {}

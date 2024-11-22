@@ -5,6 +5,7 @@ import { Credentials } from 'src/Entities/credentials.entity';
 import { AppUsers } from 'src/Entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -41,5 +42,23 @@ export class UsersService {
 
       async findOne(userName: string): Promise<Credentials> {
         return this.credentialsRepository.findOne({where : [{Username: userName}]})
+      }
+
+      async forgotPassword (email:string):Promise<{message:string}>{
+        const user = await this.credentialsRepository.findOne({where : [{Email: email}]})
+        if (!user){
+          throw new BadRequestException("No account found");
+        }
+
+        const resetToken = randomBytes(32).toString("hex");
+        const resetTokenExpiry = new Date();
+        resetTokenExpiry.setHours(resetTokenExpiry.getHours() + 1 );
+
+       user.resetToken = resetToken;
+       user.resetTokenExpiry = resetTokenExpiry
+        this.credentialsRepository.save(user);
+
+        const resetLink = '${process.env.CLIENT_APP}/reset-password?token=${resetToken}';
+        await this.emailService.sendResetPasswordEmail();
       }
 }

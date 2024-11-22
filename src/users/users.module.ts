@@ -5,6 +5,7 @@ import { AppUsers } from 'src/Entities/user.entity';
 import { Credentials } from 'src/Entities/credentials.entity';
 import { CredentialsSubscriber } from 'src/Subscribers/Credentials.subscriber';
 import { JwtModule } from '@nestjs/jwt';
+import { UsersController } from './users.controller';
 
 @Module({
   imports :[TypeOrmModule.forFeature([AppUsers, Credentials]), JwtModule.register({
@@ -12,6 +13,7 @@ import { JwtModule } from '@nestjs/jwt';
     signOptions : {expiresIn: process.env.TOKEN_SEKUNDE}
   })],
   providers: [UsersService,CredentialsSubscriber],
-  exports:[UsersService]
+  exports:[UsersService],
+  controllers: [UsersController]
 })
 export class UsersModule {}

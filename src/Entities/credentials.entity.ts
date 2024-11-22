@@ -18,6 +18,12 @@ export class Credentials {
   @Column()
   Email: string;
 
+  @Column({ nullable: true })
+  resetToken: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  resetTokenExpiry: Date;
+
   @Column()
   UserID: number;
 
