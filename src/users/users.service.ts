@@ -6,13 +6,15 @@ import { AppUsers } from 'src/Entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { randomBytes } from 'crypto';
+import { EmailsService } from 'src/emails/emails.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
 
     constructor (@InjectRepository(AppUsers) private readonly appUserRepository : Repository<AppUsers>,
                   @InjectRepository(Credentials) private readonly credentialsRepository: Repository<Credentials>,
-                  private jwtService: JwtService) {}
+                  private jwtService: JwtService , private emailService : EmailsService) {}
 
     async registerUser (registerUser : RegisterUserDto ): Promise< {access_token : string}> {
       const {fullname , username , email, password } = registerUser;
@@ -59,6 +61,27 @@ export class UsersService {
         this.credentialsRepository.save(user);
 
         const resetLink = '${process.env.CLIENT_APP}/reset-password?token=${resetToken}';
-        await this.emailService.sendResetPasswordEmail();
+        await this.emailService.sendResetPasswordEmail(resetLink , user.Email);
+
+        return { message: 'Password reset instructions sent to your email.' };
       }
+
+      async resetPassword(token: string, newPass: string): Promise<{ message: string; }> {
+        const user = await this.credentialsRepository.findOne({where : [{resetToken: token}]});
+
+        if (!user || user.resetTokenExpiry < new Date()) {
+          throw new BadRequestException('Invalid or expired reset token.');
+      }
+
+      const salt = await bcrypt.genSalt();
+      const hashedPass = await bcrypt.hash(newPass,salt);
+
+      user.Password = hashedPass;
+      user.salt = salt;
+      user.resetToken = null;
+      user.resetTokenExpiry = null;
+      await this.credentialsRepository.save(user);
+
+      return { message: 'Password successfully updated.' };
+    }
 }
