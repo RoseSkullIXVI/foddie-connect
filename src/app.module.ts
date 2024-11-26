@@ -10,6 +10,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from './Database/database.module';
 import { EmailsService } from './emails/emails.service';
+import { FollowingFollowersModule } from './following_followers/following_followers.module';
 import * as Joi from "@hapi/joi";
 
 
@@ -24,6 +25,7 @@ import * as Joi from "@hapi/joi";
   },
   ), AuthModule, UsersModule,
     DatabaseModule,
+    FollowingFollowersModule,
   ],
   controllers: [AppController],
   providers: [AppService,JwtStrategy, EmailsService],
