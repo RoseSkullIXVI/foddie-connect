@@ -8,13 +8,15 @@ import { JwtService } from '@nestjs/jwt';
 import { randomBytes } from 'crypto';
 import { EmailsService } from 'src/emails/emails.service';
 import * as bcrypt from 'bcrypt';
+import { AppUsersTypeOfFoodBridge } from 'src/Entities/AppUsersTypeOfFoodBridge.entity';
 
 @Injectable()
 export class UsersService {
 
     constructor (@InjectRepository(AppUsers) private readonly appUserRepository : Repository<AppUsers>,
                   @InjectRepository(Credentials) private readonly credentialsRepository: Repository<Credentials>,
-                  private jwtService: JwtService , private emailService : EmailsService) {}
+                  private jwtService: JwtService , private emailService : EmailsService, 
+                @InjectRepository(AppUsersTypeOfFoodBridge) private readonly appUserFood : Repository<AppUsersTypeOfFoodBridge>) {}
 
     async registerUser (registerUser : RegisterUserDto ): Promise< {access_token : string}> {
       const {fullname , username , email, password } = registerUser;
@@ -83,5 +85,13 @@ export class UsersService {
       await this.credentialsRepository.save(user);
 
       return { message: 'Password successfully updated.' };
+    }
+
+    async returnProfile(id:string){
+      return this.appUserFood .createQueryBuilder('bridge')
+      .innerJoinAndSelect('bridge.food', 'food') 
+      .innerJoinAndSelect('bridge.user', 'user') 
+      .where('bridge.AppUserID = :userId', { userId: id })
+      .getMany();
     }
 }

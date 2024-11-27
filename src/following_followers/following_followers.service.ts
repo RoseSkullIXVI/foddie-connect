@@ -33,4 +33,22 @@ export class FollowingFollowersService {
         .where('following.FollowingID = :userId', { userId: id })
         .getMany();
     }
+
+    async followUser(idCombo:any){
+        const follow = this.followRepository.create({
+            FollowerID : idCombo.UserID,
+            FollowingID: idCombo.UserToFollowID,
+            FollowAt : new Date()
+        });
+
+        this.followRepository.save(follow);
+    }
+
+    async UnfollowUser(idCombo:any){
+        const unfollow = this.followRepository.delete({
+            FollowerID : idCombo.UserID,
+            FollowingID: idCombo.UserToUnfollowID,
+        })
+
+    }
 }

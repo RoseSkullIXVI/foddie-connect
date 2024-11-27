@@ -24,4 +24,17 @@ export class FollowingFollowersController {
     async ReturnFollowers(@Param('id') id:string){
         return this.following.returnFollowers(id);
     }
+
+    @UseGuards(JwtGuard)
+    @Post('FollowUser')
+    async FollowUser(@Body()idCombo: any){
+        return this.following.followUser(idCombo);
+    }
+
+    @UseGuards(JwtGuard)
+    @Post('UnfollowUser')
+    async UnfollowUser(@Body()idCombo: any){
+        return this.following.UnfollowUser(idCombo);
+    }
+
     }
