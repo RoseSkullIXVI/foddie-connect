@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Notifications {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   NotificationsID: number;
 
   @Column()

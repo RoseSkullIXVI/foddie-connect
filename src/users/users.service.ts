@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterUserDto } from 'src/DTO/RegistrationUser.dto';
 import { Credentials } from 'src/Entities/credentials.entity';
@@ -9,6 +9,7 @@ import { randomBytes } from 'crypto';
 import { EmailsService } from 'src/emails/emails.service';
 import * as bcrypt from 'bcrypt';
 import { AppUsersTypeOfFoodBridge } from 'src/Entities/AppUsersTypeOfFoodBridge.entity';
+import Expo from 'expo-server-sdk';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +18,7 @@ export class UsersService {
                   @InjectRepository(Credentials) private readonly credentialsRepository: Repository<Credentials>,
                   private jwtService: JwtService , private emailService : EmailsService, 
                 @InjectRepository(AppUsersTypeOfFoodBridge) private readonly appUserFood : Repository<AppUsersTypeOfFoodBridge>) {}
+                private expo = new Expo();
 
     async registerUser (registerUser : RegisterUserDto ): Promise< {access_token : string}> {
       const {fullname , username , email, password } = registerUser;
@@ -93,5 +95,21 @@ export class UsersService {
       .innerJoinAndSelect('bridge.user', 'user') 
       .where('bridge.AppUserID = :userId', { userId: id })
       .getMany();
+    }
+
+    async storeUserTokenNotif(Data:any){
+      const user = await this.appUserRepository.findOne(Data.userId);
+
+      if (!user){
+        throw new NotFoundException("User not found");
+      }
+
+      if (!Data.token || !Expo.isExpoPushToken(Data.token)) {
+        throw new BadRequestException('Invalid or missing notification token');
+    }
+
+      user.NotifToken = Data.token;
+      await this.appUserRepository.save(user);
+      return {success: true};
     }
 }

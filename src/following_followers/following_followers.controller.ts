@@ -27,13 +27,13 @@ export class FollowingFollowersController {
 
     @UseGuards(JwtGuard)
     @Post('FollowUser')
-    async FollowUser(@Body()idCombo: any){
+    async FollowUser(@Body() idCombo: any){
         return this.following.followUser(idCombo);
     }
 
     @UseGuards(JwtGuard)
     @Post('UnfollowUser')
-    async UnfollowUser(@Body()idCombo: any){
+    async UnfollowUser(@Body() idCombo: any){
         return this.following.UnfollowUser(idCombo);
     }
 

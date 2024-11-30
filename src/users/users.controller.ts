@@ -21,4 +21,10 @@ export class UsersController {
     async returnProfile(@Param('id') id:string){
         return this.userService.returnProfile(id);
     }
+
+    @UseGuards(JwtGuard)
+    @Post ('/storeTokenNotif')
+    async storeUserTokenNotif(@Body() data:any){
+        return this.userService.storeUserTokenNotif(data);
+    }
 }

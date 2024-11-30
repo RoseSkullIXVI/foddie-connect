@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from './Database/database.module';
 import { EmailsService } from './emails/emails.service';
 import { FollowingFollowersModule } from './following_followers/following_followers.module';
+import { NotificationsService } from './notifications/notifications.service';
 import * as Joi from "@hapi/joi";
 
 
@@ -28,6 +29,6 @@ import * as Joi from "@hapi/joi";
     FollowingFollowersModule,
   ],
   controllers: [AppController],
-  providers: [AppService,JwtStrategy, EmailsService],
+  providers: [AppService,JwtStrategy, EmailsService, NotificationsService],
 })
 export class AppModule {}

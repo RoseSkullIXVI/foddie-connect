@@ -17,6 +17,9 @@ export class AppUsers {
   @Column()
   City: string;
 
+  @Column({nullable: true})
+  NotifToken: string;
+
   @Column({ nullable: true })
   Bio: string;
 }

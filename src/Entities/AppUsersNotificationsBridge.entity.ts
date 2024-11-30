@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, ManyToOne, JoinColumn, Column } from 'typeorm';
 import { AppUsers } from './user.entity';
 import { Notifications } from './Notifications.entity';
 
@@ -9,6 +9,9 @@ export class AppUsersNotificationsBridge {
 
   @PrimaryColumn()
   NotificationID: number;
+
+  @Column()
+  IsRead : boolean
 
   @ManyToOne(() => AppUsers)
   @JoinColumn({ name: 'AppUserID' })
