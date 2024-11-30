@@ -12,6 +12,8 @@ import { DatabaseModule } from './Database/database.module';
 import { EmailsService } from './emails/emails.service';
 import { FollowingFollowersModule } from './following_followers/following_followers.module';
 import { NotificationsService } from './notifications/notifications.service';
+import { NotificationsModule } from './notifications/notifications.module';
+import { EmailsModule } from './emails/emails.module';
 import * as Joi from "@hapi/joi";
 
 
@@ -26,9 +28,11 @@ import * as Joi from "@hapi/joi";
   },
   ), AuthModule, UsersModule,
     DatabaseModule,
+    NotificationsModule,
     FollowingFollowersModule,
+    EmailsModule,
   ],
   controllers: [AppController],
-  providers: [AppService,JwtStrategy, EmailsService, NotificationsService],
+  providers: [AppService,JwtStrategy, EmailsService],
 })
 export class AppModule {}

@@ -1,15 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Followers } from 'src/Entities/Followers.entity';
-import { Notifications } from 'src/Entities/Notifications.entity';
 import { AppUsers } from 'src/Entities/user.entity';
 import { NotificationsService } from 'src/notifications/notifications.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class FollowingFollowersService {
-    constructor( @InjectRepository(AppUsers)
-    private readonly userRepository: Repository<AppUsers>,
+    constructor( @InjectRepository(AppUsers) private readonly userRepository: Repository<AppUsers>,
 @InjectRepository(Followers) private readonly followRepository : Repository<Followers>, private notif: NotificationsService){}
 
     async findFollowingSuggestion(phoneNumbers:string[]) :Promise<AppUsers[]>{
