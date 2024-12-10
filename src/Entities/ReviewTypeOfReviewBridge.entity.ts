@@ -3,7 +3,7 @@ import { Review } from './Review.entity';
 import { TypeOfReview } from './TypeOfReview.entity';
 
 @Entity()
-export class AppUsersRestaurantLikesBridge {
+export class ReviewTypeOfReviewBridge {
   @PrimaryColumn()
   ReviewID: number;
 

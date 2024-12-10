@@ -14,6 +14,10 @@ import { FollowingFollowersModule } from './following_followers/following_follow
 import { NotificationsService } from './notifications/notifications.service';
 import { NotificationsModule } from './notifications/notifications.module';
 import { EmailsModule } from './emails/emails.module';
+import { RetaurantModule } from './retaurant/retaurant.module';
+import { ReviewService } from './review/review.service';
+import { ReviewController } from './review/review.controller';
+import { ReviewModule } from './review/review.module';
 import * as Joi from "@hapi/joi";
 
 
@@ -31,8 +35,10 @@ import * as Joi from "@hapi/joi";
     NotificationsModule,
     FollowingFollowersModule,
     EmailsModule,
+    RetaurantModule,
+    ReviewModule,
   ],
-  controllers: [AppController],
-  providers: [AppService,JwtStrategy, EmailsService],
+  controllers: [AppController, ReviewController],
+  providers: [AppService,JwtStrategy, EmailsService, ReviewService],
 })
 export class AppModule {}

@@ -9,6 +9,9 @@ export class Restaurant {
   Phone: number;
 
   @Column()
+  Name: string;
+
+  @Column({ nullable: true })
   Email: string;
 
   @Column()

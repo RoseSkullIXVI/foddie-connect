@@ -18,3 +18,6 @@ export class AppUsersRestaurantLikesBridge {
   @JoinColumn({ name: 'RestaurantID' })
   restaurant: Restaurant;
 }
+
+
+
