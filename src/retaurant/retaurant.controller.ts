@@ -1,6 +1,7 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { JwtGuard } from 'src/Guards/jwt.guard';
 import { RetaurantService } from './retaurant.service';
+import { RestaurantLike } from 'src/DTO/RestaurantLike.dto';
 
 @Controller('retaurant')
 export class RetaurantController {
@@ -9,8 +10,26 @@ export class RetaurantController {
 
     @UseGuards(JwtGuard)
     @Get('getRestaurantLikes/:name')
-    async returnProfile(@Param('name') name:string){
+    getRestaurantLikes(@Param('name') name:string){
         return this.restaurant.getLikes(name);
     }
+
+
+    @UseGuards(JwtGuard)
+    @Get('getRestaurantReviews/:name')
+    getRestaurantReviews(@Param('name') name:string){
+        return this.restaurant.getReview(name);
+    }
+
+   
+    
+    @UseGuards(JwtGuard)
+    @Post('getRestaurantReviews')
+    async restaurantLike(@Body() details : RestaurantLike):Promise <string>{
+        return this.restaurant.restaurantLike(details);
+    }
+
+    
+
     
 }
