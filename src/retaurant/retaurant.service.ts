@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RestaurantLike } from 'src/DTO/RestaurantLike.dto';
 import { AppUsersRestaurantLikesBridge } from 'src/Entities/AppUsersRestaurantLikesBridge.entity';
+import { Followers } from 'src/Entities/Followers.entity';
 import { Restaurant } from 'src/Entities/Restaurant.entity';
 import { RestaurantTypeOfCuisineBridge } from 'src/Entities/RestaurantTypeOfCuisineBridge.entity';
 import { ReviewTypeOfReviewBridge } from 'src/Entities/ReviewTypeOfReviewBridge.entity';
@@ -17,13 +18,16 @@ export class RetaurantService {
             @InjectRepository(RestaurantTypeOfCuisineBridge) private readonly resto_types : Repository<RestaurantTypeOfCuisineBridge>,
         @InjectRepository(TypeOfCuisine) private readonly types : Repository<TypeOfCuisine>){}
 
-    getLikes(name:string){
+    getLikes(name:string , AppUserID:string){ // dame na kamo na ferni ta likes ton filon kai OXI OLON
          return this.likesBridge.createQueryBuilder('bridge')
         .leftJoinAndSelect('bridge.user' , 'user')
         .leftJoinAndSelect('bridge.restaurant', 'restaurant')
+        .leftJoinAndSelect(Followers , 'followers' , 'followers.FollowingID = user.AppUserID')
         .select('user.ProfilePicture' , 'ProfilePicture')
+        .addSelect('user.AppUserID' , 'UserID')
         .where('restaurant.Name =:name' , {name: name})
-        .getMany();
+        .andWhere('followers.FollowerID =:UserID' , {UserID : AppUserID})
+        .getRawMany();
     }
 
     getReview(name:string){

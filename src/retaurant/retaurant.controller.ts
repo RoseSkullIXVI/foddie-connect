@@ -9,9 +9,9 @@ export class RetaurantController {
 
 
     @UseGuards(JwtGuard)
-    @Get('getRestaurantLikes/:name')
-    getRestaurantLikes(@Param('name') name:string){
-        return this.restaurant.getLikes(name);
+    @Get('getRestaurantLikes/:name/:AppUserID')
+    getRestaurantLikes(@Param('name') name:string , @Param('AppUserID') AppUserID:string){
+        return this.restaurant.getLikes(name,AppUserID);
     }
 
 
