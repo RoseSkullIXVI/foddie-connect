@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { promises } from 'dns';
 import { RestaurantLike } from 'src/DTO/RestaurantLike.dto';
 import { AppUsersRestaurantLikesBridge } from 'src/Entities/AppUsersRestaurantLikesBridge.entity';
 import { Followers } from 'src/Entities/Followers.entity';
@@ -31,7 +32,7 @@ export class RetaurantService {
     }
 
     getReview(name:string){
-        const resutls = this.reviewBridge.createQueryBuilder('bridge')
+        return this.reviewBridge.createQueryBuilder('bridge')
         .leftJoinAndSelect('bridge.review' , 'review')
         .leftJoinAndSelect('bridge.typeofreview' , 'typeofreview')
         .leftJoinAndSelect('review.restaurant', 'restaurant')
@@ -39,6 +40,17 @@ export class RetaurantService {
         .addSelect('typeofreview.Type' , 'type')
         .where('restaurant.Name =:name' , {name: name})
         .getMany();
+    }
+
+    getRestaurant(name:string){
+        return this.resto.find({where : {Name : name}});
+    }
+
+    async getTopRestaurant(): Promise<Restaurant[]>{
+        return this.resto.find({
+            order : {NumOfLike : 'DESC'},
+            take : 10
+        });
     }
 
     async restaurantLike(details:RestaurantLike): Promise<string>{
@@ -79,4 +91,34 @@ export class RetaurantService {
 
         return "Success";
     }
+
+    async restaurantUnlike(details: any): Promise<string> {
+        // Find the restaurant by its name
+        const existingResto = await this.resto.findOne({ where: { Name: details.name } });
+    
+        if (!existingResto) {
+            throw new BadRequestException('Restaurant does not exist');
+        }
+    
+        // Check if there is a relationship between the user and the restaurant
+        const restUserRelationship = await this.likesBridge.findOne({
+            where: { AppUserID: parseInt(details.AppUserID), RestaurantID: existingResto.RestaurantID },
+        });
+    
+        if (!restUserRelationship) {
+            throw new BadRequestException('User has not liked this restaurant');
+        }
+    
+        // Decrement the like count only if it's greater than 0
+        if (existingResto.NumOfLike > 0) {
+            existingResto.NumOfLike -= 1;
+            await this.resto.save(existingResto);
+        }
+    
+        // Remove the relationship between the user and the restaurant
+        await this.likesBridge.delete({ AppUserID: parseInt(details.AppUserID), RestaurantID: existingResto.RestaurantID });
+    
+        return 'Success';
+    }
+    
 }

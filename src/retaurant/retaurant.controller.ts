@@ -21,12 +21,32 @@ export class RetaurantController {
         return this.restaurant.getReview(name);
     }
 
+
+    @UseGuards(JwtGuard)
+    @Get('getRestaurant/:name')
+    getRestaurant(@Param('name') name:string){
+        return this.restaurant.getRestaurant(name);
+    }
+
+    @UseGuards(JwtGuard)
+    @Get('getTopRestaurant')
+    getTopRestaurant(){
+        return this.restaurant.getTopRestaurant();
+    }
+
    
     
     @UseGuards(JwtGuard)
-    @Post('getRestaurantReviews')
+    @Post('setRestauranLike')
     async restaurantLike(@Body() details : RestaurantLike):Promise <string>{
         return this.restaurant.restaurantLike(details);
+    }
+
+
+    @UseGuards(JwtGuard)
+    @Post('removeRestauranLike')
+    async restaurantUnlike(@Body() details):Promise <string>{
+        return this.restaurant.restaurantUnlike(details);
     }
 
     
