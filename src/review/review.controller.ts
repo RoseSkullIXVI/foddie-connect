@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { JwtGuard } from 'src/Guards/jwt.guard';
 import { ReviewService } from './review.service';
 import { Review } from 'src/DTO/Review.dto';
@@ -19,6 +19,13 @@ export class ReviewController {
     @Post('submit')
     async submit(@Body() details : Review){
         return this.review.submitReview(details);
+    }
+
+
+    @UseGuards(JwtGuard)
+    @Get('homeFeed/:id')
+    async homefeed(@Param('id') id:string){
+        return this.review.getFeedWithFollowersReviews(id);
     }
 
 

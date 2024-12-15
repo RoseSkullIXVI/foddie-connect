@@ -29,6 +29,12 @@ export class RetaurantController {
     }
 
     @UseGuards(JwtGuard)
+    @Get('getUserRestaurant/:id')
+    getUserRestaurant(@Param('id') id:string){
+        return this.restaurant.getUsersRestaurant(id);
+    }
+
+    @UseGuards(JwtGuard)
     @Get('getTopRestaurant')
     getTopRestaurant(){
         return this.restaurant.getTopRestaurant();

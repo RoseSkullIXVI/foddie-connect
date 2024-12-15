@@ -34,5 +34,26 @@ export class ReviewService {
         
         return "Success-Submit";
     }
+
+    async getFeedWithFollowersReviews(userID: string) { 
+        return this.review.createQueryBuilder('review')
+            .innerJoinAndSelect('review.restaurant', 'restaurant')
+            .innerJoin('Followers', 'followers', 'followers.FollowingID = review.AppUserID') 
+            .innerJoin('Review_TypeOfReview_Bridge', 'bridge', 'bridge.ReviewID = review.ReviewID') 
+            .innerJoin('TypeOfReview', 'typeofreview', 'bridge.ReviewTypeID = typeofreview.ReviewTypeID') 
+            .innerJoin('AppUsers', 'user', 'user.AppUserID = review.AppUserID') 
+            .where('followers.FollowerID = :userID', { userID })
+            .select([
+                'restaurant.RestaurantID',
+                'restaurant.Name',
+                'restaurant.Location',
+                'review.ReviewID',
+                'review.ReviewDate',
+                'typeofreview.Description AS ReviewDescription', 
+                'user.FullName AS FollowerName', 
+                'user.ProfilePicture AS FollowerProfilePicture' 
+            ])
+            .getRawMany();
+    }
     
 }

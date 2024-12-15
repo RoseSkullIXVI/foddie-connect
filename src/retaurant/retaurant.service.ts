@@ -19,13 +19,14 @@ export class RetaurantService {
             @InjectRepository(RestaurantTypeOfCuisineBridge) private readonly resto_types : Repository<RestaurantTypeOfCuisineBridge>,
         @InjectRepository(TypeOfCuisine) private readonly types : Repository<TypeOfCuisine>){}
 
-    getLikes(name:string , AppUserID:string){ // dame na kamo na ferni ta likes ton filon kai OXI OLON
+    getLikes(name:string , AppUserID:string){ 
          return this.likesBridge.createQueryBuilder('bridge')
         .leftJoinAndSelect('bridge.user' , 'user')
         .leftJoinAndSelect('bridge.restaurant', 'restaurant')
         .leftJoinAndSelect(Followers , 'followers' , 'followers.FollowingID = user.AppUserID')
         .select('user.ProfilePicture' , 'ProfilePicture')
         .addSelect('user.AppUserID' , 'UserID')
+        .addSelect('user.FullName' , 'Fname')
         .where('restaurant.Name =:name' , {name: name})
         .andWhere('followers.FollowerID =:UserID' , {UserID : AppUserID})
         .getRawMany();
@@ -51,6 +52,14 @@ export class RetaurantService {
             order : {NumOfLike : 'DESC'},
             take : 10
         });
+    }
+
+    async getUsersRestaurant(UserID : string){
+        return this.likesBridge.createQueryBuilder('bridge')
+        .leftJoinAndSelect('bridge.user' , 'user')
+        .leftJoinAndSelect('bridge.restaurant', 'restaurant')
+        .where('user.AppUserID =:userID' , {userID : UserID} )
+        .getMany();
     }
 
     async restaurantLike(details:RestaurantLike): Promise<string>{
@@ -120,5 +129,7 @@ export class RetaurantService {
     
         return 'Success';
     }
+
+   
     
 }

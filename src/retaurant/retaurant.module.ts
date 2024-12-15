@@ -7,9 +7,13 @@ import { ReviewTypeOfReviewBridge } from 'src/Entities/ReviewTypeOfReviewBridge.
 import { TypeOfCuisine } from 'src/Entities/TypeOfCuisine.entity';
 import { RestaurantTypeOfCuisineBridge } from 'src/Entities/RestaurantTypeOfCuisineBridge.entity';
 import { Restaurant } from 'src/Entities/Restaurant.entity';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports :[TypeOrmModule.forFeature([AppUsersRestaurantLikesBridge,ReviewTypeOfReviewBridge,TypeOfCuisine,RestaurantTypeOfCuisineBridge,Restaurant])],
+  imports :[TypeOrmModule.forFeature([AppUsersRestaurantLikesBridge,ReviewTypeOfReviewBridge,TypeOfCuisine,RestaurantTypeOfCuisineBridge,Restaurant]), JwtModule.register({
+      secret: process.env.JWT_TOKEN,
+      signOptions : {expiresIn: process.env.TOKEN_SEKUNDE}
+    })],
   controllers: [RetaurantController],
   providers: [RetaurantService]
 })

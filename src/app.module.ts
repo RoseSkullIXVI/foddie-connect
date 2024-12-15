@@ -38,7 +38,7 @@ import * as Joi from "@hapi/joi";
     RetaurantModule,
     ReviewModule,
   ],
-  controllers: [AppController, ReviewController],
-  providers: [AppService,JwtStrategy, EmailsService, ReviewService],
+  controllers: [AppController],
+  providers: [AppService,JwtStrategy, EmailsService],
 })
 export class AppModule {}
