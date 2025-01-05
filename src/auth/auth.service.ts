@@ -7,7 +7,10 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthService {
     constructor (private UsersService:UsersService,private jwtService: JwtService) {}
     async validateUser (username:string , pass:string): Promise<any>{
-        const user = await this.UsersService.findOne(username);        
+        const user = await this.UsersService.findOne(username);    
+        if(!user){
+            return null
+        }   
         const isMatch = await bcrypt.compare(pass, user.Password);
         if (user && isMatch){
             const { Password, ...result } = user;
