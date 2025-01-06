@@ -24,7 +24,7 @@ export class UsersService {
       const {fullname , username , email, password } = registerUser;
       const existingUser = await this.credentialsRepository.findOne({where : [{Username: username},{Email:email}]})
       if (existingUser) {
-        throw new BadRequestException('Username or email already taken');
+        throw new BadRequestException('Username already taken');
       }
       const appUser = this.appUserRepository.create({FullName:fullname});
       const savedUser = await this.appUserRepository.save(appUser);
