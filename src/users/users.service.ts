@@ -46,8 +46,8 @@ export class UsersService {
     }
 
 
-      async findOne(userName: string): Promise<Credentials> {
-        return this.credentialsRepository.findOne({where : [{Username: userName}]})
+      async findOne(email: string): Promise<Credentials> {
+        return this.credentialsRepository.findOne({where : [{Email: email}]})
       }
 
       async forgotPassword (email:string):Promise<{message:string}>{
@@ -64,7 +64,8 @@ export class UsersService {
        user.resetTokenExpiry = resetTokenExpiry
         this.credentialsRepository.save(user);
 
-        const resetLink = '${process.env.CLIENT_APP}/reset-password?token=${resetToken}';
+        // const resetLink = '${process.env.CLIENT_APP}/reset-password?token=${resetToken}';
+         const resetLink = `${process.env.CLIENT_APP}/index`;
         await this.emailService.sendResetPasswordEmail(resetLink , user.Email);
 
         return { message: 'Password reset instructions sent to your email.' };

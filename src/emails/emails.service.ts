@@ -40,7 +40,7 @@ export class EmailsService {
                 </head>
                 <body>
                     <p>You requested to reset your password.</p>
-                    <p>Please, click the link below to reset your password:</p>
+                    <p>Please, click the link below to reset your password:</p> 
                     <a href="${link}">Reset Password</a>
                     <p>If you did not request this, please ignore this email.</p>
                     <p>Thank you,</p>

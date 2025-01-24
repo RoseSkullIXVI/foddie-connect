@@ -6,8 +6,8 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
     constructor (private UsersService:UsersService,private jwtService: JwtService) {}
-    async validateUser (username:string , pass:string): Promise<any>{
-        const user = await this.UsersService.findOne(username);    
+    async validateUser (email:string , pass:string): Promise<any>{
+        const user = await this.UsersService.findOne(email);    
         if(!user){
             return null
         }   
@@ -22,7 +22,7 @@ export class AuthService {
     }
 
     async login (user:any){
-        const payload = {username: user.username , sub: user.userID};
+        const payload = {email: user.email , sub: user.userID};
         return {
             access_token : this.jwtService.sign(payload, { secret: process.env.JWT_TOKEN  , expiresIn: process.env.TOKEN_SEKUNDE}),
         };
