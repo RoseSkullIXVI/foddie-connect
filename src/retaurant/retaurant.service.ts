@@ -58,7 +58,7 @@ export class RetaurantService {
         return this.likesBridge.createQueryBuilder('bridge')
         .leftJoinAndSelect('bridge.user' , 'user')
         .leftJoinAndSelect('bridge.restaurant', 'restaurant')
-        .where('user.AppUserID =:userID' , {userID : UserID} )
+        .where('bridge.AppUserID = :userID' , {userID : UserID} )
         .getMany();
     }
 

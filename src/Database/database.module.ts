@@ -15,6 +15,7 @@ import { CredentialsSubscriber } from "src/Subscribers/Credentials.subscriber";
         password: configService.get("PGPASSWORD"),
         database: configService.get("PGDATABASE"),
         entities: [__dirname + "/../**/*.entity{.ts,.js}"],
+        synchronize : true,
         ssl: {
           rejectUnauthorized: false, 
         },

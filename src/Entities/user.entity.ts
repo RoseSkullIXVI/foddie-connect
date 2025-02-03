@@ -8,13 +8,13 @@ export class AppUsers {
   @Column()
   FullName: string;
 
-  @Column()
+  @Column({nullable: true })
   PhoneName: string;
 
   @Column({ type: 'bytea', nullable: true })
   ProfilePicture: Buffer;
 
-  @Column()
+  @Column({nullable: true })
   City: string;
 
   @Column({nullable: true})

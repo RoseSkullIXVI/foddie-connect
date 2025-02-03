@@ -20,7 +20,7 @@ export class FollowingFollowersController {
     }
     
     @UseGuards(JwtGuard)
-    @Get('returnFollowing/:id')
+    @Get('returnFollowers/:id')
     async ReturnFollowers(@Param('id') id:string){
         return this.following.returnFollowers(id);
     }
