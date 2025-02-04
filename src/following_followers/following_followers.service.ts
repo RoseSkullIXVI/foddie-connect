@@ -29,7 +29,7 @@ export class FollowingFollowersService {
     async returnFollowers(id:string){
         return await this.followRepository
         .createQueryBuilder('following')
-        .innerJoinAndSelect('following.followers', 'follower')
+        .innerJoinAndSelect('following.follower', 'follower')
         .where('following.FollowingID = :userId', { userId: id })
         .getMany();
     }
