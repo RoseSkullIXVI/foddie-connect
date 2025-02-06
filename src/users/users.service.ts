@@ -91,11 +91,19 @@ export class UsersService {
     }
 
     async returnProfile(id:string){
-      return this.appUserFood .createQueryBuilder('bridge')
+      const profile = await this.appUserFood.createQueryBuilder('bridge')
       .innerJoinAndSelect('bridge.food', 'food') 
       .innerJoinAndSelect('bridge.user', 'user') 
       .where('bridge.AppUserID = :userId', { userId: id })
       .getMany();
+  
+  if (profile.length === 0) {
+      // Handle case where no data is found
+      const userData = await this.appUserRepository.findOne({ where: { AppUserId: parseInt(id) } });
+      return userData;
+  }
+  
+  return profile;
     }
 
     async storeUserTokenNotif(Data:any){
