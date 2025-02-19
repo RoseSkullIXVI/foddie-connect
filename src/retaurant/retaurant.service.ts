@@ -54,12 +54,33 @@ export class RetaurantService {
         });
     }
 
-    async getUsersRestaurant(UserID : string){
-        return this.likesBridge.createQueryBuilder('bridge')
-        .leftJoinAndSelect('bridge.user' , 'user')
-        .leftJoinAndSelect('bridge.restaurant', 'restaurant')
-        .where('bridge.AppUserID = :userID' , {userID : UserID} )
-        .getMany();
+    async getUsersRestaurant(UserID : string){ 
+       const results = await this.likesBridge.createQueryBuilder('bridge')
+    .leftJoinAndSelect('bridge.user', 'user')
+    .leftJoinAndSelect('bridge.restaurant', 'restaurant')
+    .leftJoinAndSelect('restaurant.cuisineBridge', 'cuisineBridge') 
+    .leftJoinAndSelect('cuisineBridge.cuisine', 'cuisine') 
+    .where('bridge.AppUserID = :userID', { userID: UserID })
+    .getMany();
+
+     console.log("Cuisines" , results.map(re => re.restaurant.cuisineBridge.map(c => c.cuisine.Type)))
+    // return results;
+    return results.map(result => ({
+        AppUserID: result.AppUserID,
+        RestaurantID: result.RestaurantID,
+        restaurant: {
+            Email: result.restaurant.Email,
+            Location: result.restaurant.Location,
+            Name: result.restaurant.Name,
+            NumOfLike: result.restaurant.NumOfLike,
+            Phone: result.restaurant.Phone,
+            Picture: result.restaurant.Picture,
+            RestaurantID: result.restaurant.RestaurantID,
+            Cuisines: result.restaurant.cuisineBridge.map(c => c.cuisine.Type)
+        },
+        user: result.user
+    }));
+
     }
 
     async restaurantLike(details:RestaurantLike): Promise<string>{

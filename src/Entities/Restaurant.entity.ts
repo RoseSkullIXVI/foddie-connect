@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { RestaurantTypeOfCuisineBridge } from './RestaurantTypeOfCuisineBridge.entity';
 
 @Entity()
 export class Restaurant {
@@ -22,4 +23,8 @@ export class Restaurant {
 
   @Column({ default: 0 })
   NumOfLike: number;
+
+
+  @OneToMany(() => RestaurantTypeOfCuisineBridge, (cuisineBridge) => cuisineBridge.restaurant)
+  cuisineBridge: RestaurantTypeOfCuisineBridge[];
 }
